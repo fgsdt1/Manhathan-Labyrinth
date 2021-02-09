@@ -1,12 +1,12 @@
 #
-# Sample Labyrinth class to preesent a simple Manhathan map search
+# Sample Labyrinth class to present a simple Manhattan path search
 #
 import copy
 
 MOVES = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
 # ---------------------------------------------------------------------
-# Sample Labyrinth class to preesent a simple Manhathan map search
+# Sample Labyrinth class to present a simple Manhattan path search
 # ---------------------------------------------------------------------
 class Labyrinth():
 
@@ -44,26 +44,32 @@ class Labyrinth():
             return False
 
         self.cellsPath = {}                     # Initializon variables
-        visited = [origin]                      # List to keep track of the cells already visited adding the origin coordinate
+        pending = [origin]                      # List to keep track of the cells pending calculations. Adding the origin coordinate
         self.cellsPath[origin] = [0, [origin]]  # adding the path from origin to itself
 
-        while len(visited) > 0:
+        while len(pending) > 0:
 
-            current = visited.pop(0)                                # poping an element from the visited
+            current = pending.pop(0)                                # poping an element from the list of pending cells
+
             for m in MOVES:                                         # looping on the possible moves (4 directionsin this case)
                 newCell = (current[0] + m[0], current[1] + m[1])    # calculating new coordinates depending on the move
+
                 if newCell not in self.walls:                       # if it is not a wall we proceed
-                    if newCell in self.cellsPath.keys():            # if we were already here
+
+                    if newCell in self.cellsPath.keys():            # if we were already here (the coordinates are a valid key to the dictionary of cells)
+
                         if self.cellsPath[newCell][0] > self.cellsPath[current][0] + 1:             # check if the path stored is longer than the new one
-                            self.cellsPath[newCell][0] = self.cellsPath[current][0] + 1             # in that case update the path length
+
+                            self.cellsPath[newCell][0] = self.cellsPath[current][0] + 1             # if it is the case update the path length
                             self.cellsPath[newCell][1] = copy.deepcopy(self.cellsPath[current][1])  # copy the path
-                            self.cellsPath[newCell][1].append(newCell)                              # and add the current cell
+                            self.cellsPath[newCell][1].append(newCell)                              # and add the cell coors to the path
 
                     else:
+
                         self.cellsPath[newCell] = [self.cellsPath[current][0] + 1, []]              # initialize cellpath with length + 1
                         self.cellsPath[newCell][1] = copy.deepcopy(self.cellsPath[current][1])      # copy the path
-                        self.cellsPath[newCell][1].append(newCell)                                  # and add the current cell
-                        visited.append(newCell)                                                     # add the cell to the visited list
+                        self.cellsPath[newCell][1].append(newCell)                                  # and add the cell coors to the path
+                        pending.append(newCell)                                                     # add the cell to the pending list
 
         return True
 
@@ -115,8 +121,5 @@ result = l.allPaths (l.entry)
 l.printPath(l.exit)
 
 # Calculates all the paths and prints the one to the given destination
-l.calculateAndPrintPath((1,1), (3,7))
-
-
-
+l.calculateAndPrintPath((2,1), (4,7))
 
