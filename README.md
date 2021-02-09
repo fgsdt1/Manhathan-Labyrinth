@@ -1,1 +1,1 @@
-# Manhathan-Labyrinth
+# Manhattan-Labyrinth
